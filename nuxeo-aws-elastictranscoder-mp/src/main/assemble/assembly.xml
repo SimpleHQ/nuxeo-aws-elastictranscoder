@@ -25,10 +25,10 @@
         <filter token="DISTRIB_VERSION" value="${nuxeo.distribution.version}" />
       </filterset>
     </copy>
-    <!--
+    
     <copy file="${outdir}/artifacts.properties" todir="${outdir}/marketplace/install" />
     <copy file="${outdir}/test-artifacts.properties" todir="${outdir}/marketplace/install" />
-  -->
+ 
 
     <!-- Base distribution NXR -->
     <copy todir="${outdir}">

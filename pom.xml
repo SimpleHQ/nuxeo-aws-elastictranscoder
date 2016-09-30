@@ -3,11 +3,11 @@
   <parent>
     <groupId>org.nuxeo.ecm.distribution</groupId>
     <artifactId>nuxeo-distribution</artifactId>
-    <version>8.3</version>
+    <version>8.2</version>
   </parent>
   <groupId>org.nuxeo.aws.elastictranscoder</groupId>
   <artifactId>nuxeo-aws-elastictranscoder-parent</artifactId>
-  <version>8.3-SNAPSHOT</version>
+  <version>8.2-SNAPSHOT</version>
   <name>Parent Project for Nuxeo-AWS Elastic Transcoder</name>
   <packaging>pom</packaging>
   <description />
@@ -15,9 +15,6 @@
     <module>nuxeo-aws-elastictranscoder-plugin</module>
     <module>nuxeo-aws-elastictranscoder-mp</module>
   </modules>
-  <properties>
-    <nuxeo.aws.elastictranscoder.version>8.3-SNAPSHOT</nuxeo.aws.elastictranscoder.version>
-  </properties>
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -80,4 +77,7 @@
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
+  <properties>
+  	<nuxeo.aws.elastictranscoder.version>8.2-SNAPSHOT</nuxeo.aws.elastictranscoder.version>
+  </properties>
 </project>
