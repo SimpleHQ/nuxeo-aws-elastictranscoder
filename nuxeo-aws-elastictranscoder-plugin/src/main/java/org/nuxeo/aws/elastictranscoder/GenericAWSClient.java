@@ -23,6 +23,8 @@ import org.nuxeo.runtime.api.Framework;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.elastictranscoder.AmazonElasticTranscoder;
 import com.amazonaws.services.elastictranscoder.AmazonElasticTranscoderClient;
 import com.amazonaws.services.s3.AmazonS3;
@@ -108,6 +110,7 @@ public class GenericAWSClient {
         if (elasticTranscoder == null) {
             elasticTranscoder = new AmazonElasticTranscoderClient(
                     awsCredentialsProvider);
+            elasticTranscoder.setRegion(Region.getRegion(Regions.US_WEST_2));
         }
 
         return elasticTranscoder;
