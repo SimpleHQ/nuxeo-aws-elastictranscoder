@@ -24,5 +24,5 @@ package org.nuxeo.aws.elastictranscoder.notification;
  */
 public interface JobStatusNotificationHandler {
 
-    public void handle(JobStatusNotification jobStatusNotification);
+    public boolean handle(JobStatusNotification jobStatusNotification);
 }

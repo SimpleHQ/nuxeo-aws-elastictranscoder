@@ -95,21 +95,29 @@ public class SqsQueueNotificationWorker implements Runnable {
 
             synchronized (handlers) {
                 for (Message message : messages) {
+                	boolean handled = false;
+                	
                     try {
                         // Parse notification and call handlers.
+                    	// Simple.io note: The original author may have misunderstood the pattern.
+                    	// As implemented we have one worker with a single handler per transcode request.
+                        // This is not ideal but OK for now. Consider what happens when we have many transcodes
+                        // running in parallel - eventually the requisite handler will get its notification.
                         JobStatusNotification notification = parseNotification(message);
                         for (JobStatusNotificationHandler handler : handlers) {
-                            handler.handle(notification);
+                            handled |= handler.handle(notification);
                         }
                     } catch (IOException e) {
                         System.out.println("Failed to convert notification: "
                                 + e.getMessage());
                     }
 
-                    // Delete the message from the queue.
-                    amazonSqs.deleteMessage(new DeleteMessageRequest().withQueueUrl(
-                            queueUrl).withReceiptHandle(
-                            message.getReceiptHandle()));
+                    if (handled) {
+	                    // Delete the message from the queue.
+	                    amazonSqs.deleteMessage(new DeleteMessageRequest().withQueueUrl(
+	                            queueUrl).withReceiptHandle(
+	                            message.getReceiptHandle()));
+                    }
                 }
             }
         }

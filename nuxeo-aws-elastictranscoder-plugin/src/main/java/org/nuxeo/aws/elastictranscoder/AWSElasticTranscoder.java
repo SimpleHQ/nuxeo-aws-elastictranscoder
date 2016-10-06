@@ -422,16 +422,10 @@ public class AWSElasticTranscoder {
         JobStatusNotificationHandler handler = new JobStatusNotificationHandler() {
 
             @Override
-            public void handle(JobStatusNotification jobStatusNotification) {
+            public boolean handle(JobStatusNotification jobStatusNotification) {
                 if (jobStatusNotification.getJobId().equals(awsJobId)) {
-
-                    /*
-                     * System.out.println("========== <jobStatusNotification>");
-                     * System.out.println(jobStatusNotification);
-                     * System.out.println
-                     * ("========== </jobStatusNotification>");
-                     */
-
+                	log.info("JobStatus: " + jobStatusNotification);
+                     
                     if (jobStatusNotification.getState().isTerminalState()) {
                         jobEndState = jobStatusNotification.getState();
                         if (jobEndState == JobState.ERROR) {
@@ -441,6 +435,12 @@ public class AWSElasticTranscoder {
                             notifyAll();
                         }
                     }
+                    
+                    return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
         };

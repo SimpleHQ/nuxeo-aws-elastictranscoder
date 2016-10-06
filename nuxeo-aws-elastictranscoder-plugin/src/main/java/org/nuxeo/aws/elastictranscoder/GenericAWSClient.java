@@ -76,6 +76,8 @@ public class GenericAWSClient {
 
     private static String buildCredentiaProviderLock = "Lock";
 
+    private static String elasticTranscoderLock = "TranscoderLock";
+
     public GenericAWSClient() {
 
         buildCredentiaProvider();
@@ -108,9 +110,13 @@ public class GenericAWSClient {
     public AmazonElasticTranscoder getElasticTranscoder() {
 
         if (elasticTranscoder == null) {
-            elasticTranscoder = new AmazonElasticTranscoderClient(
-                    awsCredentialsProvider);
-            elasticTranscoder.setRegion(Region.getRegion(Regions.US_WEST_2));
+            synchronized (elasticTranscoderLock) {
+                // Dodgy DCL pattern but already used below...
+                if (elasticTranscoder == null) {
+                	elasticTranscoder = new AmazonElasticTranscoderClient(awsCredentialsProvider);
+                	elasticTranscoder.setRegion(Region.getRegion(Regions.US_WEST_2));
+                }
+            }
         }
 
         return elasticTranscoder;
