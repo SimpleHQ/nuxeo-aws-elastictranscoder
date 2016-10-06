@@ -99,7 +99,7 @@ public class SqsQueueNotificationWorker implements Runnable {
                 	
                     try {
                         // Parse notification and call handlers.
-                    	// Simple.io note: The original author may have misunderstood the pattern.
+                    	// Simple.io note:
                     	// As implemented we have one worker with a single handler per transcode request.
                         // This is not ideal but OK for now. Consider what happens when we have many transcodes
                         // running in parallel - eventually the requisite handler will get its notification.
