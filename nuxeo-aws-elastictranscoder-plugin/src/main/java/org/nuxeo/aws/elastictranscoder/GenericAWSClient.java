@@ -23,6 +23,7 @@ import org.nuxeo.runtime.api.Framework;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.elastictranscoder.AmazonElasticTranscoder;
@@ -64,7 +65,7 @@ public class GenericAWSClient {
 
     private static String awsSecretAccessKey;
 
-    private static int awsKeysCheckedStatus = -1;
+    private static boolean awsKeysCheckedStatus = false;
 
     private static AWSCredentialsProvider awsCredentialsProvider = null;
 
@@ -124,11 +125,11 @@ public class GenericAWSClient {
 
     protected void buildCredentiaProvider() {
 
-        if (awsKeysCheckedStatus == -1) {
+        if (!awsKeysCheckedStatus) {
             synchronized (buildCredentiaProviderLock) {
                 // Another thread may have filled the variables while we were
                 // acquiring the lock => check again.
-                if (awsKeysCheckedStatus == -1) {
+                if (!awsKeysCheckedStatus) {
                     awsAccessKeyId = Framework.getProperty(AWSElasticTranscoderConstants.CONF_AWS_KEY_ACCESS);
                     awsSecretAccessKey = Framework.getProperty(AWSElasticTranscoderConstants.CONF_AWS_KEY_SECRET);
 
@@ -142,17 +143,17 @@ public class GenericAWSClient {
 
                     if (StringUtils.isBlank(awsAccessKeyId)
                             || StringUtils.isBlank(awsSecretAccessKey)) {
-                        awsKeysCheckedStatus = 0;
+                        awsCredentialsProvider = new InstanceProfileCredentialsProvider();
+                        try {
+                            awsCredentialsProvider.getCredentials();
+                        } catch (AmazonClientException e) {
+                            awsCredentialsProvider = null;
+                        }
                     } else {
-                        awsKeysCheckedStatus = 1;
+                        awsCredentialsProvider = new SimpleAWSCredentialProvider(awsAccessKeyId, awsSecretAccessKey);
                     }
-
-                    if (awsKeysCheckedStatus == 1) {
-                        awsCredentialsProvider = new SimpleAWSCredentialProvider(
-                                awsAccessKeyId, awsSecretAccessKey);
-                    } else {
-                        awsCredentialsProvider = null;
-                    }
+                    
+                    awsKeysCheckedStatus = true;
                 }
             }
         }
