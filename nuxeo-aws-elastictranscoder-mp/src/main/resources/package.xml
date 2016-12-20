@@ -13,10 +13,8 @@
   <production-state>development</production-state>
   <supported>false</supported>
   <platforms>
-    <platform>cap-@DISTRIB_VERSION@</platform>
-    <platform>cap-@DISTRIB_VERSION@-HF*</platform>
-    <platform>cap-8.2</platform>
-    <platform>cap-8.3</platform>
+    <platform>server-@DISTVERSION@</platform>
+    <platform>server-@DISTVERSION@-*</platform>
   </platforms>
   <dependencies>
     <package>nuxeo-dam</package>
