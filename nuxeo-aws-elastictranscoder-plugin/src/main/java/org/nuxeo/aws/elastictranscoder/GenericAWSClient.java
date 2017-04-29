@@ -110,7 +110,7 @@ public class GenericAWSClient {
         if (elasticTranscoder == null) {
             elasticTranscoder = new AmazonElasticTranscoderClient(
                     awsCredentialsProvider);
-            if (!StringUtils.isBlank(System.getenv(AWSElasticTranscoderConstants.AWS_REGION))) {
+            if (!StringUtils.isBlank(System.getenv(AWSElasticTranscoderConstants.AWS_ENV_VAR_REGION))) {
               Region region = Region.getRegion(Regions.fromName(System.getenv(AWSElasticTranscoderConstants.AWS_ENV_VAR_REGION)));
               elasticTranscoder.setRegion(region);
           }
