@@ -115,7 +115,10 @@ public class GenericAWSClient {
                 // Dodgy DCL pattern but already used below...
                 if (elasticTranscoder == null) {
                 	elasticTranscoder = new AmazonElasticTranscoderClient(awsCredentialsProvider);
-                	elasticTranscoder.setRegion(Region.getRegion(Regions.US_WEST_2));
+                  if (!StringUtils.isBlank(System.getenv(AWSElasticTranscoderConstants.AWS_ENV_VAR_REGION))) {
+                      Region region = Region.getRegion(Regions.fromName(System.getenv(AWSElasticTranscoderConstants.AWS_ENV_VAR_REGION)));
+                      elasticTranscoder.setRegion(region);
+                  }
                 }
             }
         }
@@ -152,7 +155,7 @@ public class GenericAWSClient {
                     } else {
                         awsCredentialsProvider = new SimpleAWSCredentialProvider(awsAccessKeyId, awsSecretAccessKey);
                     }
-                    
+
                     awsKeysCheckedStatus = true;
                 }
             }
